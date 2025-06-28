@@ -6,9 +6,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Passport\HasApiTokens; // Menggunakan HasApiTokens dari Laravel Passport
+use Laravel\Passport\Contracts\OAuthenticatable;
+use Laravel\Passport\HasApiTokens;
 
-class MarketplaceUser extends Authenticatable implements MustVerifyEmail
+class MarketplaceUser extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 

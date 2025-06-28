@@ -9,8 +9,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/register-seller', [SellerController::class, 'register']);
+Route::post('/register', [SellerController::class, 'register']);
 Route::post('/login', [SellerController::class, 'login']);
-Route::middleware('auth:api')->post('/products/sync', [ProductSyncController::class, 'sync']);
+
 
 

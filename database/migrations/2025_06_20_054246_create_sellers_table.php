@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('shop_name')->unique();
             $table->string('shop_url')->nullable();
             $table->text('shop_description')->nullable();
-            $table->string('client_id')->unique();
-            $table->string('client_secret');
+            $table->string('client_id')->unique()->nullable();
+            $table->string('client_secret')->nullable();
             $table->boolean('is_active')->default(true);
             $table->timestamps();
         });

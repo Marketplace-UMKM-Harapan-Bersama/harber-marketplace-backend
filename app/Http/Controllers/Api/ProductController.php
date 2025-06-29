@@ -8,8 +8,19 @@ use App\Models\Product;
 use App\Http\Resources\ProductResource;
 use Illuminate\Http\Response;
 
+/**
+ * Controller untuk manajemen produk.
+ * 
+ * Menyediakan endpoint untuk menampilkan daftar produk (dengan pagination).
+ */
 class ProductController extends Controller
 {
+    /**
+     * Menampilkan daftar produk dengan pagination.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $products = Product::latest()->paginate(10);

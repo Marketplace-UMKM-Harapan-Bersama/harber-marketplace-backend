@@ -40,6 +40,11 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'api' => [
+            'driver' => 'passport',
+            'provider' => 'marketplace_users',
+        ],
     ],
 
     /*
@@ -63,6 +68,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', App\Models\User::class),
+        ],
+
+        'marketplace_users' => [
+            'driver' => 'eloquent',
+            'model' => env('AUTH_MARKETPLACE_MODEL', App\Models\MarketplaceUser::class),
         ],
 
         // 'users' => [

@@ -23,7 +23,6 @@ Response API sudah terstruktur menggunakan Laravel Resource agar mudah digunakan
 
 ## Autentikasi
 
-- Endpoint `/api/user` menggunakan Laravel Sanctum (`auth:sanctum`).
 - Endpoint produk dan kategori **tidak membutuhkan autentikasi** (public).
 
 ---
@@ -165,7 +164,6 @@ Response API sudah terstruktur menggunakan Laravel Resource agar mudah digunakan
 
 - Pagination default: 10 data per halaman.
 - Endpoint dapat dikembangkan untuk fitur tambah, edit, hapus, dan pencarian.
-- Untuk endpoint yang membutuhkan autentikasi, gunakan token dari Laravel Sanctum.
 
 ---
 

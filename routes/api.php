@@ -12,5 +12,9 @@ Route::get('/sellers/{id}', [SellerController::class, 'show']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::middleware('auth:api')->group(function () {
+    Route::get('/users', [UserController::class, 'oauthUser']);
+    Route::get('/sellers', [SellerController::class, 'oauthSeller']);
+});
 
 

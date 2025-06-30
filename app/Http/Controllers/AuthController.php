@@ -8,7 +8,7 @@ use App\Models\Seller;
 use Laravel\Passport\Client;
 use Illuminate\Support\Str;
 
-class SellerController extends Controller
+class AuthController extends Controller
 {
     public function register(Request $request)
     {
@@ -32,7 +32,7 @@ class SellerController extends Controller
                 'role' => 'required|in:seller,customer',
             ]);
         }
-        
+
 
         \DB::beginTransaction();
 
@@ -62,7 +62,7 @@ class SellerController extends Controller
             ]);
         } catch (\Exception $e) {
             \DB::rollBack();
-            
+
             return response()->json([
                 'message' => 'Registration failed',
                 'error' => $e->getMessage(),
@@ -82,7 +82,7 @@ class SellerController extends Controller
                 $token = $user->createToken('YourApp')->accessToken;
 
                 return array(
-                    'token_type'=>'Bearer', 
+                    'token_type'=>'Bearer',
                     'expires_in'=>60*60*24*7,
                     'access_token'=>$token,
                     'refresh_token'=>''

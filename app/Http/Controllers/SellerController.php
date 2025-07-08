@@ -8,8 +8,60 @@ use App\Models\Seller;
 use Laravel\Passport\Client;
 use Illuminate\Support\Str;
 
+/**
+ * @OA\Tag(
+ *     name="Seller Auth",
+ *     description="Authentication and registration for sellers and customers"
+ * )
+ */
 class SellerController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/api/register-seller",
+     *     tags={"Seller Auth"},
+     *     summary="Register a new user (customer or seller)",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name", "email", "password", "role"},
+     *             @OA\Property(property="name", type="string", example="Andi"),
+     *             @OA\Property(property="email", type="string", format="email", example="andi@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="secret123"),
+     *             @OA\Property(property="role", type="string", enum={"seller", "customer"}, example="seller"),
+     *             @OA\Property(property="shop_name", type="string", example="Toko Andi"),
+     *             @OA\Property(property="shop_url", type="string", example="toko-andi"),
+     *             @OA\Property(property="shop_description", type="string", example="Menjual barang elektronik")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="User registered successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Seller registered successfully"),
+     *             @OA\Property(property="user", type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="Andi"),
+     *                 @OA\Property(property="email", type="string", example="andi@example.com"),
+     *                 @OA\Property(property="role", type="string", example="seller")
+     *             ),
+     *             @OA\Property(property="seller_info", type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="shop_name", type="string", example="Toko Andi"),
+     *                 @OA\Property(property="shop_url", type="string", example="toko-andi")
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Registration failed"
+     *     )
+     * )
+     */
     public function register(Request $request)
     {
         $role = $request->role;
@@ -70,6 +122,39 @@ class SellerController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/login",
+     *     tags={"Seller Auth"},
+     *     summary="Login for customer/seller and get access token",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(property="email", type="string", format="email", example="andi@example.com"),
+     *             @OA\Property(property="password", type="string", format="password", example="secret123")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Login successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="token_type", type="string", example="Bearer"),
+     *             @OA\Property(property="expires_in", type="integer", example=604800),
+     *             @OA\Property(property="access_token", type="string", example="eyJ0eXAiOiJKV1Q..."),
+     *             @OA\Property(property="refresh_token", type="string", example="")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Password wrong / User not found",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Password wrong")
+     *         )
+     *     )
+     * )
+     */
     public function login(Request $request)
     {
 

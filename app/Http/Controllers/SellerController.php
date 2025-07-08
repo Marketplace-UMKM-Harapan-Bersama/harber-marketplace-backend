@@ -62,6 +62,8 @@ class SellerController extends Controller
      *     )
      * )
      */
+class SellerController extends Controller
+{
     public function register(Request $request)
     {
         $role = $request->role;

@@ -86,7 +86,7 @@ class ProductSyncController extends Controller
                 'image_url' => $request->image_url,
                 'weight' => $request->weight,
                 'is_active' => $request->is_active ?? true,
-                'last_synced_at' => Carbon::now(),
+                'last_synced_at' => \Carbon::now(),
             ]
         );
 

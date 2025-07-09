@@ -17,7 +17,6 @@ Route::post('/login', [SellerController::class, 'login']);
 
 Route::apiResource('products', ProductController::class)->only('index','show');
 Route::apiResource('product-categories', ProductCategoryController::class)->only('index','show');
-Route::post('/product/sync', [ProductController::class, 'syncSingleProduct']);
 
 //router user yang login
 Route::group(['middleware'=>'auth:api'], function(){
@@ -41,3 +40,5 @@ Route::group(['middleware'=>'auth:api'], function(){
 });
 
 Route::post('/midtrans/callback', [PaymentCallbackController::class, 'handle']);
+Route::post('/product/sync', [ProductSyncController::class, 'syncSingleProduct']);
+

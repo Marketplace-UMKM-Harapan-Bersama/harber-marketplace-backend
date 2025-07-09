@@ -56,4 +56,9 @@ class MarketplaceUser extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function clients()
+    {
+        return $this->hasMany(\Laravel\Passport\Client::class, 'user_id');
+    }
 }

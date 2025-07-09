@@ -854,6 +854,88 @@
                 }
             }
         },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get authenticated user data",
+                "description": "Mengambil data user yang sedang login melalui token Passport.",
+                "operationId": "getAuthenticatedUser",
+                "responses": {
+                    "200": {
+                        "description": "User data retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Jamal Apriadi"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "jamal@example.com"
+                                        },
+                                        "phone_number": {
+                                            "type": "string",
+                                            "example": "08345353"
+                                        },
+                                        "address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "city": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "province": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "postal_code": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "role": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "email_verified_at": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01T12:00:00Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01T12:00:00Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (unauthenticated)"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/product/sync": {
             "post": {
                 "tags": [
@@ -869,6 +951,7 @@
                             "schema": {
                                 "required": [
                                     "client_id",
+                                    "client_secret",
                                     "seller_product_id",
                                     "name",
                                     "price",
@@ -878,6 +961,10 @@
                                     "client_id": {
                                         "type": "string",
                                         "example": "abc123"
+                                    },
+                                    "client_secret": {
+                                        "type": "string",
+                                        "example": "asdf2342432323"
                                     },
                                     "seller_product_id": {
                                         "type": "string",

@@ -936,121 +936,13 @@
                 ]
             }
         },
-        "/api/product/sync": {
-            "post": {
-                "tags": [
-                    "External Integration"
-                ],
-                "summary": "Sync a single product from external store (by seller client ID and client secret)",
-                "description": "Digunakan oleh toko eksternal untuk mengirim data produk ke marketplace pusat.",
-                "operationId": "ec3acc516fa27356e96e34a4d123fb3d",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "client_id",
-                                    "client_secret",
-                                    "seller_product_id",
-                                    "name",
-                                    "price",
-                                    "stock"
-                                ],
-                                "properties": {
-                                    "client_id": {
-                                        "type": "string",
-                                        "example": "abc123"
-                                    },
-                                    "client_secret": {
-                                        "type": "string",
-                                        "example": "asdf2342432323"
-                                    },
-                                    "seller_product_id": {
-                                        "type": "string",
-                                        "example": "SP001"
-                                    },
-                                    "name": {
-                                        "type": "string",
-                                        "example": "Tas Ransel Hitam"
-                                    },
-                                    "description": {
-                                        "type": "string",
-                                        "example": "Tas untuk kerja & sekolah"
-                                    },
-                                    "price": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": 159000
-                                    },
-                                    "stock": {
-                                        "type": "integer",
-                                        "example": 10
-                                    },
-                                    "sku": {
-                                        "type": "string",
-                                        "example": "SKU-001"
-                                    },
-                                    "image_url": {
-                                        "type": "string",
-                                        "example": "https://example.com/image.jpg"
-                                    },
-                                    "weight": {
-                                        "type": "number",
-                                        "format": "float",
-                                        "example": 0.8
-                                    },
-                                    "is_active": {
-                                        "type": "boolean",
-                                        "example": true
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Product synced successfully",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "success": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "Product synced successfully."
-                                        },
-                                        "product_id": {
-                                            "type": "integer",
-                                            "example": 12
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Seller not found"
-                    },
-                    "400": {
-                        "description": "Invalid input"
-                    }
-                }
-            }
-        },
-        "/api/register-seller": {
+        "/api/register": {
             "post": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "Register a new user (customer or seller)",
-                "operationId": "e308b2b868b8a672ddeddb016b9d2359",
+                "operationId": "8a56853624e025573120a09a4c75d468",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1173,7 +1065,7 @@
                     "Auth"
                 ],
                 "summary": "Login for customer/seller and get access token",
-                "operationId": "562f93a4a4d383c95ba1c9b6d7170190",
+                "operationId": "a3b306d14572d1f4bd6c064b3233e7b8",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -1248,6 +1140,120 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/api/product/sync": {
+            "post": {
+                "tags": [
+                    "External Integration"
+                ],
+                "summary": "Sync a single product from external store (by seller client ID and client secret)",
+                "description": "Digunakan oleh toko eksternal untuk mengirim data produk ke marketplace pusat.",
+                "operationId": "ec3acc516fa27356e96e34a4d123fb3d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "client_id",
+                                    "client_secret",
+                                    "seller_product_id",
+                                    "name",
+                                    "price",
+                                    "category_id",
+                                    "stock"
+                                ],
+                                "properties": {
+                                    "client_id": {
+                                        "type": "string",
+                                        "example": "abc123"
+                                    },
+                                    "client_secret": {
+                                        "type": "string",
+                                        "example": "asdf2342432323"
+                                    },
+                                    "seller_product_id": {
+                                        "type": "string",
+                                        "example": "SP001"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Tas Ransel Hitam"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Tas untuk kerja & sekolah"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 159000
+                                    },
+                                    "stock": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "sku": {
+                                        "type": "string",
+                                        "example": "SKU-001"
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "example": "https://example.com/image.jpg"
+                                    },
+                                    "weight": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0.8
+                                    },
+                                    "category_id": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 1
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Product synced successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Product synced successfully."
+                                        },
+                                        "product_id": {
+                                            "type": "integer",
+                                            "example": 12
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Seller not found"
+                    },
+                    "400": {
+                        "description": "Invalid input"
                     }
                 }
             }

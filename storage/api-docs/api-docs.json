@@ -936,6 +936,154 @@
                 ]
             }
         },
+        "/api/product/sync": {
+            "post": {
+                "tags": [
+                    "External Integration"
+                ],
+                "summary": "Sync a single product from external store (by seller client ID and client secret)",
+                "description": "Digunakan oleh toko eksternal untuk mengirim data produk ke marketplace pusat.",
+                "operationId": "ec3acc516fa27356e96e34a4d123fb3d",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "client_id",
+                                    "client_secret",
+                                    "seller_product_id",
+                                    "name",
+                                    "price",
+                                    "stock"
+                                ],
+                                "properties": {
+                                    "client_id": {
+                                        "type": "string",
+                                        "example": "abc123"
+                                    },
+                                    "client_secret": {
+                                        "type": "string",
+                                        "example": "asdf2342432323"
+                                    },
+                                    "seller_product_id": {
+                                        "type": "string",
+                                        "example": "SP001"
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Tas Ransel Hitam"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Tas untuk kerja & sekolah"
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 159000
+                                    },
+                                    "stock": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "sku": {
+                                        "type": "string",
+                                        "example": "SKU-001"
+                                    },
+                                    "image_url": {
+                                        "type": "string",
+                                        "example": "https://example.com/image.jpg"
+                                    },
+                                    "weight": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 0.8
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "User data retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Jamal Apriadi"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "jamal@example.com"
+                                        },
+                                        "phone_number": {
+                                            "type": "string",
+                                            "example": "08345353"
+                                        },
+                                        "address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "city": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "province": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "postal_code": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "role": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "email_verified_at": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01T12:00:00Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01T12:00:00Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (unauthenticated)"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/register": {
             "post": {
                 "tags": [

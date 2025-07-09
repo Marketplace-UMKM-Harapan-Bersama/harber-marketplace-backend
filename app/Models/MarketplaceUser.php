@@ -48,7 +48,6 @@ class MarketplaceUser extends Authenticatable
     {
         return $this->hasMany(\Laravel\Passport\Client::class, 'user_id');
     }
-}
 
     public function seller()
     {

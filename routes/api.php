@@ -2,8 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductSyncController;
-use App\Http\Controllers\SellerController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\SellerController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\OrderController;
@@ -11,19 +12,15 @@ use App\Http\Controllers\Api\CartController;
 
 use App\Http\Controllers\Api\PaymentCallbackController;
 
+Route::get('/users/{id}', [UserController::class, 'show']);
+Route::get('/sellers/{id}', [SellerController::class, 'show']);
 
-Route::post('/register', [SellerController::class, 'register']);
-Route::post('/login', [SellerController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::apiResource('products', ProductController::class)->only('index','show');
-Route::apiResource('product-categories', ProductCategoryController::class)->only('index','show');
-
-//router user yang login
-Route::group(['middleware'=>'auth:api'], function(){
-    Route::get('/user', function(Request $request){
-        return $request->user();
-    });
-
+Route::middleware('auth:api')->group(function () {
+    Route::get('/users', [UserController::class, 'oauthUser']);
+    Route::get('/sellers', [SellerController::class, 'oauthSeller']);
     Route::post('/product/sync',[ProductSyncController::class,'sync']);
 
     Route::get('/orders', [OrderController::class, 'index']);
@@ -41,4 +38,5 @@ Route::group(['middleware'=>'auth:api'], function(){
 
 Route::post('/midtrans/callback', [PaymentCallbackController::class, 'handle']);
 Route::post('/product/sync', [ProductSyncController::class, 'syncSingleProduct']);
-
+Route::apiResource('products', ProductController::class)->only('index','show');
+Route::apiResource('product-categories', ProductCategoryController::class)->only('index','show');

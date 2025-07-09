@@ -44,8 +44,15 @@ class MarketplaceUser extends Authenticatable
         'password' => 'hashed',
     ];
 
+    public function clients()
+    {
+        return $this->hasMany(\Laravel\Passport\Client::class, 'user_id');
+    }
+}
+
     public function seller()
     {
         return $this->hasOne(Seller::class);
     }
 }
+

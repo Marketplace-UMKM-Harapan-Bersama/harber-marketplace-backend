@@ -87,7 +87,7 @@
         "/api/products/{id}/add-to-cart": {
             "post": {
                 "tags": [
-                    "Products"
+                    "Cart"
                 ],
                 "summary": "Add a product to the authenticated user's cart",
                 "operationId": "d859bbfd53c8ff90b61076515fdc8e43",
@@ -165,6 +165,122 @@
                 ]
             }
         },
+        "/api/cart/product/{product_id}/increase": {
+            "patch": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Increase quantity of a cart item by product ID",
+                "operationId": "12b41a10ced2331ae363f8041aeb1a8b",
+                "parameters": [
+                    {
+                        "name": "product_id",
+                        "in": "path",
+                        "description": "Product ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Quantity increased.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quantity increased."
+                                        },
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "product_id": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "quantity": {
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cart item not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/cart/product/{product_id}/decrease": {
+            "patch": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Decrease quantity of a cart item by product ID",
+                "operationId": "80c434e52001f8651db6b91007e19fd8",
+                "parameters": [
+                    {
+                        "name": "product_id",
+                        "in": "path",
+                        "description": "Product ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Quantity decreased.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Quantity decreased."
+                                        },
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "product_id": {
+                                            "type": "integer",
+                                            "example": 5
+                                        },
+                                        "quantity": {
+                                            "type": "integer",
+                                            "example": 2
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Cart item not found"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/cart/{id}": {
             "delete": {
                 "tags": [
@@ -228,24 +344,41 @@
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "shipping_address"
+                                    "shipping_address",
+                                    "shipping_city",
+                                    "shipping_province",
+                                    "shipping_postal_code",
+                                    "payment_method"
                                 ],
                                 "properties": {
                                     "shipping_address": {
                                         "type": "string",
                                         "example": "Jl. Merdeka No. 123, Jakarta"
                                     },
-                                    "city": {
+                                    "shipping_city": {
                                         "type": "string",
                                         "example": "Jakarta"
                                     },
-                                    "province": {
+                                    "shipping_province": {
                                         "type": "string",
                                         "example": "DKI Jakarta"
                                     },
-                                    "postal_code": {
+                                    "shipping_postal_code": {
                                         "type": "string",
                                         "example": "10110"
+                                    },
+                                    "payment_method": {
+                                        "type": "string",
+                                        "enum": [
+                                            "cod",
+                                            "transfer",
+                                            "ewallet"
+                                        ],
+                                        "example": "cod"
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Tolong dikirim siang hari."
                                     }
                                 },
                                 "type": "object"
@@ -283,6 +416,30 @@
                                         "message": {
                                             "type": "string",
                                             "example": "Cart is empty."
+                                        },
+                                        "error_type": {
+                                            "type": "string",
+                                            "example": "empty_cart"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Cart contains products from multiple sellers",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Cart contains products from multiple sellers. Please checkout one seller at a time."
+                                        },
+                                        "error_type": {
+                                            "type": "string",
+                                            "example": "multiple_sellers"
                                         }
                                     },
                                     "type": "object"
@@ -302,13 +459,48 @@
                                         },
                                         "error": {
                                             "type": "string",
-                                            "example": "SQLSTATE..."
+                                            "example": "SQLSTATE[HY000]..."
                                         }
                                     },
                                     "type": "object"
                                 }
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/clear-cart": {
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Clear all items from the authenticated user's cart",
+                "operationId": "efb6cc18b3c4ea49007fa72a36cf60eb",
+                "responses": {
+                    "200": {
+                        "description": "All cart items deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "All cart items cleared."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     }
                 },
                 "security": [
@@ -368,15 +560,95 @@
                         "passport": []
                     }
                 ]
+            },
+            "post": {
+                "tags": [
+                    "External Integration"
+                ],
+                "summary": "Terima data order dari sistem eksternal setelah pembayaran selesai",
+                "operationId": "ab0100af245273306a225b01eaedfe55",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "order_number": {
+                                        "type": "string",
+                                        "example": "INV-64EE1F10A8E35"
+                                    },
+                                    "total_amount": {
+                                        "type": "number",
+                                        "example": 250000
+                                    },
+                                    "shipping_address": {
+                                        "type": "string",
+                                        "example": "Jl. Merdeka 123"
+                                    },
+                                    "shipping_city": {
+                                        "type": "string",
+                                        "example": "Jakarta"
+                                    },
+                                    "shipping_province": {
+                                        "type": "string",
+                                        "example": "DKI Jakarta"
+                                    },
+                                    "shipping_postal_code": {
+                                        "type": "string",
+                                        "example": "10110"
+                                    },
+                                    "notes": {
+                                        "type": "string",
+                                        "example": "Bungkus rapi"
+                                    },
+                                    "items": {
+                                        "type": "array",
+                                        "items": {
+                                            "properties": {
+                                                "product_id": {
+                                                    "type": "integer",
+                                                    "example": 5
+                                                },
+                                                "quantity": {
+                                                    "type": "integer",
+                                                    "example": 2
+                                                },
+                                                "price": {
+                                                    "type": "number",
+                                                    "example": 125000
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Order berhasil diterima dari sistem eksternal"
+                    },
+                    "400": {
+                        "description": "Validasi gagal"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
             }
         },
-        "/api/orders/{id}": {
+        "/api/order/{id}": {
             "get": {
                 "tags": [
                     "Orders"
                 ],
                 "summary": "Get order detail by ID",
-                "operationId": "88d27387b1e409e075c18609d4a0c300",
+                "operationId": "9fb6e018497aaebb6875182026ab3b9a",
                 "parameters": [
                     {
                         "name": "id",
@@ -452,6 +724,52 @@
                         "passport": []
                     }
                 ]
+            }
+        },
+        "/api/midtrans/callback": {
+            "post": {
+                "tags": [
+                    "Payment"
+                ],
+                "summary": "Handle Midtrans payment notification callback",
+                "operationId": "81752496c5efb10130a6c7dfd03b0215",
+                "requestBody": {
+                    "description": "Midtrans Notification Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "transaction_status": {
+                                        "type": "string",
+                                        "example": "settlement"
+                                    },
+                                    "order_id": {
+                                        "type": "string",
+                                        "example": "INV-64EE1F10A8E35"
+                                    },
+                                    "payment_type": {
+                                        "type": "string",
+                                        "example": "bank_transfer"
+                                    },
+                                    "fraud_status": {
+                                        "type": "string",
+                                        "example": "accept"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Callback handled successfully"
+                    },
+                    "404": {
+                        "description": "Order not found"
+                    }
+                }
             }
         },
         "/api/product-categories": {
@@ -536,29 +854,117 @@
                 }
             }
         },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get authenticated user data",
+                "description": "Mengambil data user yang sedang login melalui token Passport.",
+                "operationId": "getAuthenticatedUser",
+                "responses": {
+                    "200": {
+                        "description": "User data retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Jamal Apriadi"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "example": "jamal@example.com"
+                                        },
+                                        "phone_number": {
+                                            "type": "string",
+                                            "example": "08345353"
+                                        },
+                                        "address": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "city": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "province": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "postal_code": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "role": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "email_verified_at": {
+                                            "type": "string",
+                                            "example": ""
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01T12:00:00Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2024-01-01T12:00:00Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized (unauthenticated)"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/product/sync": {
             "post": {
                 "tags": [
-                    "Products"
+                    "External Integration"
                 ],
-                "summary": "Sync a single product from external store (by seller client ID)",
-                "operationId": "092f4e682110d75ec5b69561e8c66a66",
+                "summary": "Sync a single product from external store (by seller client ID and client secret)",
+                "description": "Digunakan oleh toko eksternal untuk mengirim data produk ke marketplace pusat.",
+                "operationId": "ec3acc516fa27356e96e34a4d123fb3d",
                 "requestBody": {
                     "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
                                 "required": [
-                                    "seller_client_id",
+                                    "client_id",
+                                    "client_secret",
                                     "seller_product_id",
                                     "name",
                                     "price",
                                     "stock"
                                 ],
                                 "properties": {
-                                    "seller_client_id": {
+                                    "client_id": {
                                         "type": "string",
                                         "example": "abc123"
+                                    },
+                                    "client_secret": {
+                                        "type": "string",
+                                        "example": "asdf2342432323"
                                     },
                                     "seller_product_id": {
                                         "type": "string",
@@ -641,7 +1047,7 @@
         "/api/register-seller": {
             "post": {
                 "tags": [
-                    "Seller Auth"
+                    "Auth"
                 ],
                 "summary": "Register a new user (customer or seller)",
                 "operationId": "e308b2b868b8a672ddeddb016b9d2359",
@@ -764,7 +1170,7 @@
         "/api/login": {
             "post": {
                 "tags": [
-                    "Seller Auth"
+                    "Auth"
                 ],
                 "summary": "Login for customer/seller and get access token",
                 "operationId": "562f93a4a4d383c95ba1c9b6d7170190",
@@ -863,18 +1269,27 @@
         },
         {
             "name": "Product Categories",
-            "description": "API for managing product categories"
+            "description": "List data product categories dan product category by slug"
         },
         {
-            "name": "Products"
+            "name": "Products",
+            "description": "List data product dan single product menggunakan slug"
         },
         {
-            "name": "Seller Auth",
-            "description": "Authentication and registration for sellers and customers"
+            "name": "Auth",
+            "description": "Registrasi dan Login Customer / Seller"
         },
         {
             "name": "Orders",
             "description": "Orders"
+        },
+        {
+            "name": "Payment",
+            "description": "Payment"
+        },
+        {
+            "name": "External Integration",
+            "description": "External Integration"
         }
     ]
 }

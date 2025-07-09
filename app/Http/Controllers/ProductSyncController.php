@@ -9,57 +9,91 @@ use Laravel\Passport\Token;
 
 class ProductSyncController extends Controller
 {
-    public function sync(Request $request)
+    /**
+     * @OA\Post(
+     *     path="/api/product/sync",
+     *     tags={"External Integration"},
+     *     summary="Sync a single product from external store (by seller client ID and client secret)",
+     *     description="Digunakan oleh toko eksternal untuk mengirim data produk ke marketplace pusat.",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"client_id", "client_secret", "seller_product_id", "name", "price", "stock"},
+     *             @OA\Property(property="client_id", type="string", example="abc123"),
+     *             @OA\Property(property="client_secret", type="string", example="asdf2342432323"),
+     *             @OA\Property(property="seller_product_id", type="string", example="SP001"),
+     *             @OA\Property(property="name", type="string", example="Tas Ransel Hitam"),
+     *             @OA\Property(property="description", type="string", example="Tas untuk kerja & sekolah"),
+     *             @OA\Property(property="price", type="number", format="float", example=159000),
+     *             @OA\Property(property="stock", type="integer", example=10),
+     *             @OA\Property(property="sku", type="string", example="SKU-001"),
+     *             @OA\Property(property="image_url", type="string", example="https://example.com/image.jpg"),
+     *             @OA\Property(property="weight", type="number", format="float", example=0.8),
+     *             @OA\Property(property="is_active", type="boolean", example=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Product synced successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Product synced successfully."),
+     *             @OA\Property(property="product_id", type="integer", example=12)
+     *         )
+     *     ),
+     *     @OA\Response(response=404, description="Seller not found"),
+     *     @OA\Response(response=400, description="Invalid input")
+     * )
+     */
+    public function syncSingleProduct(Request $request)
     {
-        $validated = $request->validate([
-            'seller_product_id' => 'required',
+        $request->validate([
+            'client_id' => 'required|string',
+            'client_secret' => 'required',
+            'seller_product_id' => 'required|string',
             'name' => 'required|string',
-            'description' => 'nullable',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
-            'category_id' => 'required|exists:product_categories,id',
+            'description' => 'nullable|string',
+            'sku' => 'nullable|string',
+            'image_url' => 'nullable|string',
+            'weight' => 'nullable|numeric',
+            'is_active' => 'nullable|boolean',
         ]);
 
-        // Ambil token yang sedang digunakan
-        $accessToken = $request->bearerToken();
-
-        if (!$accessToken) {
-            return response()->json(['error' => 'No token provided.'], 401);
-        }
-
-        // Ambil token object dari DB
-        $token = \DB::table('oauth_access_tokens')
-            ->where('id', explode('.', $accessToken)[0]) // token format: token.payload.signature
+        $seller = Seller::where('client_id', $request->client_id)
+            ->where('client_secret', $request->client_secret)
             ->first();
 
-        if (!$token) {
-            return response()->json(['error' => 'Invalid token.'], 401);
-        }
-
-        $clientId = $token->client_id;
-
-        // Cari seller berdasarkan client_id
-        $seller = Seller::where('client_id', $clientId)->first();
-
         if (!$seller) {
-            return response()->json(['error' => 'Seller not found for this client.'], 403);
+            return response()->json([
+                'success' => false,
+                'message' => 'Seller not found.'
+            ], 404);
         }
 
-        // Simpan atau update produk
         $product = Product::updateOrCreate(
             [
                 'seller_id' => $seller->id,
-                'seller_product_id' => $validated['seller_product_id']
+                'seller_product_id' => $request->seller_product_id
             ],
-            array_merge($validated, [
-                'seller_id' => $seller->id,
-                'last_synced_at' => now(),
-            ])
+            [
+                'name' => $request->name,
+                'description' => $request->description ?? '',
+                'price' => $request->price,
+                'stock' => $request->stock,
+                'sku' => $request->sku,
+                'image_url' => $request->image_url,
+                'weight' => $request->weight,
+                'is_active' => $request->is_active ?? true,
+                'last_synced_at' => Carbon::now(),
+            ]
         );
 
         return response()->json([
-            'message' => 'Product synced successfully',
-            'product' => $product,
+            'success' => true,
+            'message' => 'Product synced successfully.',
+            'product_id' => $product->id
         ]);
     }
 }

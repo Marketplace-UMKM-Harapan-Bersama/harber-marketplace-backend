@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Seller;
 use Laravel\Passport\Token;
 
+use Carbon\Carbon;
+
 class ProductSyncController extends Controller
 {
     /**

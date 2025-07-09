@@ -137,6 +137,7 @@ class CartController extends Controller
                 'user_id' => $user->id,
                 'product_id' => $product->id,
                 'quantity' => $request->quantity,
+                'seller_id' => $product->seller_id
             ]);
         }
 

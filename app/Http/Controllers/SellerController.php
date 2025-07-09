@@ -18,7 +18,7 @@ class SellerController extends Controller
 {
     /**
      * @OA\Post(
-     *     path="/api/register-seller",
+     *     path="/api/register",
      *     tags={"Auth"},
      *     summary="Register a new user (customer or seller)",
      *     @OA\RequestBody(

@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\PaymentCallbackController;
 
 
-Route::post('/register-seller', [SellerController::class, 'register']);
+Route::post('/register', [SellerController::class, 'register']);
 Route::post('/login', [SellerController::class, 'login']);
 
 Route::apiResource('products', ProductController::class)->only('index','show');

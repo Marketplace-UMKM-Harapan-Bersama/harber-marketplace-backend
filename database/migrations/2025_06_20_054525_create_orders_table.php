@@ -24,6 +24,7 @@ return new class extends Migration
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
             $table->string('order_number', 50)->unique();
+            $table->string('snap_token')->nullable();
             $table->decimal('total_amount', 10, 2);
             $table->decimal('shipping_cost', 10, 2);
             $table->string('payment_method', 50);

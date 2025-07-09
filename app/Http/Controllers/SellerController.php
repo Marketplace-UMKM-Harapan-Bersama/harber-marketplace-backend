@@ -10,8 +10,8 @@ use Illuminate\Support\Str;
 
 /**
  * @OA\Tag(
- *     name="Seller Auth",
- *     description="Authentication and registration for sellers and customers"
+ *     name="Auth",
+ *     description="Registrasi dan Login Customer / Seller"
  * )
  */
 class SellerController extends Controller
@@ -19,7 +19,7 @@ class SellerController extends Controller
     /**
      * @OA\Post(
      *     path="/api/register-seller",
-     *     tags={"Seller Auth"},
+     *     tags={"Auth"},
      *     summary="Register a new user (customer or seller)",
      *     @OA\RequestBody(
      *         required=true,
@@ -97,11 +97,22 @@ class SellerController extends Controller
             ]);
 
             if ($request->role === 'seller') {
+
+                $client = Client::create([
+                    'name' => 'Client for Store: ' . $request->shop_name,
+                    'redirect_uris' => '',
+                    'revoked' => false,
+                    'secret' => Str::random(40), // generate secret manual
+                    'grant_types' => 'client_credentials', // untuk Passport v11+
+                ]);
+
                 $seller = Seller::create([
                     'user_id' => $user->id,
                     'shop_name' => $request->shop_name,
                     'shop_url' => $request->shop_url ?? null,
                     'shop_description' => $request->shop_description ?? null,
+                    'client_id' => $client->id,
+                    'client_secret' => $client->secret,
                 ]);
             }
 
@@ -125,7 +136,7 @@ class SellerController extends Controller
     /**
      * @OA\Post(
      *     path="/api/login",
-     *     tags={"Seller Auth"},
+     *     tags={"Auth"},
      *     summary="Login for customer/seller and get access token",
      *     @OA\RequestBody(
      *         required=true,

@@ -11,7 +11,7 @@ use App\Http\Resources\ProductCategoryResource;
 /**
  * @OA\Tag(
  *     name="Product Categories",
- *     description="API for managing product categories"
+ *     description="List data product categories dan product category by slug"
  * )
  */
 class ProductCategoryController extends Controller

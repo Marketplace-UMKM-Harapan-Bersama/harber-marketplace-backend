@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Order;
+use App\Http\Resources\OrderResource;
 
 class OrderController extends Controller
 {
@@ -33,16 +34,16 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::where('user_id', Auth::guard('api')->id())
+        $orders = Order::where('user_id', auth()->guard('api')->id())
             ->orderBy('created_at', 'desc')
-            ->get(['id', 'total', 'shipping_address', 'created_at']);
-
-        return response()->json($orders);
+            ->paginate(15);
+        
+        return OrderResource::collection($orders);
     }
 
     /**
      * @OA\Get(
-     *     path="/api/orders/{id}",
+     *     path="/api/order/{id}",
      *     tags={"Orders"},
      *     summary="Get order detail by ID",
      *     security={{"passport":{}}},
@@ -74,21 +75,12 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        $order = Order::with(['items.product'])->where('id', $id)->where('user_id', auth()->guard('api')->id())->firstOrFail();
+        $order = Order::with(['items.product'])
+            ->where('id', $id)
+            ->where('user_id', auth()->guard('api')->id())
+            ->firstOrFail();
 
-        return response()->json([
-            'id' => $order->id,
-            'total' => $order->total,
-            'shipping_address' => $order->shipping_address,
-            'order_items' => $order->items->map(function ($item) {
-                return [
-                    'product_id' => $item->product_id,
-                    'product_name' => $item->product->name ?? null,
-                    'quantity' => $item->quantity,
-                    'price' => $item->price,
-                ];
-            })
-        ]);
+        return new OrderResource($order);
     }
 
 

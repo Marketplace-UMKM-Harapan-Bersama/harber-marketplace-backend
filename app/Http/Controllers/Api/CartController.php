@@ -296,8 +296,8 @@ class CartController extends Controller
      *         description="Checkout successful",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="Checkout successful."),
-     *             @OA\Property(property="order_id", type="integer", example=101)
-     *             @OA\Property(property="snap_token", type="string", example="eb06fa47-732f-46b1-bb15-14ce3b25920e")
+     *             @OA\Property(property="order_id", type="integer", example=101),
+     *             @OA\Property(property="snap_token", type="string", example="eb06fa47-732f-46b1-bb15-14ce3b25920e"),
      *             @OA\Property(property="midtrans_redirect_url", type="string", example="https://app.sandbox.midtrans.com/snap/v4/redirection/eb06fa47-732f-46b1-bb15-14ce3b25920e")
      *         )
      *     ),

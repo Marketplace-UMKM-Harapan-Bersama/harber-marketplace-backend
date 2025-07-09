@@ -400,6 +400,14 @@
                                         "order_id": {
                                             "type": "integer",
                                             "example": 101
+                                        },
+                                        "snap_token": {
+                                            "type": "string",
+                                            "example": "eb06fa47-732f-46b1-bb15-14ce3b25920e"
+                                        },
+                                        "midtrans_redirect_url": {
+                                            "type": "string",
+                                            "example": "https://app.sandbox.midtrans.com/snap/v4/redirection/eb06fa47-732f-46b1-bb15-14ce3b25920e"
                                         }
                                     },
                                     "type": "object"
@@ -466,6 +474,41 @@
                                 }
                             }
                         }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/clear-cart": {
+            "delete": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Clear all items from the authenticated user's cart",
+                "operationId": "efb6cc18b3c4ea49007fa72a36cf60eb",
+                "responses": {
+                    "200": {
+                        "description": "All cart items deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "All cart items cleared."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     }
                 },
                 "security": [

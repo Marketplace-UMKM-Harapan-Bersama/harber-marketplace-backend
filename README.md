@@ -21,7 +21,18 @@
     php artisan key:generate
     php artisan migrate
     ```
-6. Jalankan server:
+6. Inisialisasi laravel passport:
+    ```bash
+    php artisan passport:client --personal --name="Marketplace Personal Access Client" --provider="marketplace_users"
+    php artisan passport:client
+    ```
+
+    Catatan: Simpan client id dan secret di file `.env`.
+    ```ini
+    CLIENT_ID=client_id
+    CLIENT_SECRET=client_secret
+    ```
+7. Jalankan server:
     ```bash
     composer run dev
     ```
@@ -34,7 +45,8 @@
     ```
 
 ### API Examples:
-1. Register `/api/register-seller`:
+1. Register `/api/register`:
+
     Headers:
     ```http
     Content-Type: application/json
@@ -67,6 +79,7 @@
     }
     ```
 2. Login `/api/login`:
+
     Headers:
     ```http
     Content-Type: application/json
@@ -74,7 +87,7 @@
     Request body:
     ```
     {
-        "grant_type":"passort",
+        "grant_type":"password",
         "client_id":"client_id",
         "client_sectret":"client_secret",
         "email": "johndoe@example.com",

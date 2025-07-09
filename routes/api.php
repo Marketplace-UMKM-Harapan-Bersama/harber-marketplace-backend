@@ -2,25 +2,21 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductSyncController;
-use App\Http\Controllers\SellerController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\SellerController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductCategoryController;
 
+Route::get('/users/{id}', [UserController::class, 'show']);
+Route::get('/sellers/{id}', [SellerController::class, 'show']);
 
-Route::post('/register-seller', [SellerController::class, 'register']);
-Route::post('/login', [SellerController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::apiResource('products', ProductController::class)->only('index','show');
-Route::apiResource('product-categories', ProductCategoryController::class)->only('index','show');
-Route::post('/product/sync', [ProductController::class, 'syncSingleProduct']);
-
-//router user yang login
-Route::group(['middleware'=>'auth:api'], function(){
-    Route::get('/user', function(Request $request){
-        return $request->user();
-    });
-
+Route::middleware('auth:api')->group(function () {
+    Route::get('/users', [UserController::class, 'oauthUser']);
+    Route::get('/sellers', [SellerController::class, 'oauthSeller']);
     Route::post('/product/sync',[ProductSyncController::class,'sync']);
     Route::get('/order', [ProductSyncController::class, 'index']);
     Route::get('/order/{id}', [ProductSyncController::class, 'show']);
@@ -30,3 +26,6 @@ Route::group(['middleware'=>'auth:api'], function(){
     Route::delete('/cart/{id}', [CartController::class, 'destroy']);     // Hapus produk dari keranjang
     Route::post('/cart/checkout', [CartController::class, 'checkout']);  // Checkout
 });
+Route::apiResource('products', ProductController::class)->only('index','show');
+Route::apiResource('product-categories', ProductCategoryController::class)->only('index','show');
+Route::post('/product/sync', [ProductController::class, 'syncSingleProduct']);

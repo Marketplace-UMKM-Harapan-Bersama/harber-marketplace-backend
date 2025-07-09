@@ -14,8 +14,9 @@ use Illuminate\Support\Str;
  *     description="Authentication and registration for sellers and customers"
  * )
  */
-class SellerController extends Controller
+class AuthController extends Controller
 {
+
     /**
      * @OA\Post(
      *     path="/api/register-seller",
@@ -62,8 +63,6 @@ class SellerController extends Controller
      *     )
      * )
      */
-class SellerController extends Controller
-{
     public function register(Request $request)
     {
         $role = $request->role;
@@ -86,7 +85,7 @@ class SellerController extends Controller
                 'role' => 'required|in:seller,customer',
             ]);
         }
-        
+
 
         \DB::beginTransaction();
 
@@ -116,7 +115,7 @@ class SellerController extends Controller
             ]);
         } catch (\Exception $e) {
             \DB::rollBack();
-            
+
             return response()->json([
                 'message' => 'Registration failed',
                 'error' => $e->getMessage(),
@@ -169,7 +168,7 @@ class SellerController extends Controller
                 $token = $user->createToken('YourApp')->accessToken;
 
                 return array(
-                    'token_type'=>'Bearer', 
+                    'token_type'=>'Bearer',
                     'expires_in'=>60*60*24*7,
                     'access_token'=>$token,
                     'refresh_token'=>''

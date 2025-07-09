@@ -20,7 +20,7 @@ class ProductSyncController extends Controller
      *     @OA\RequestBody(
      *         required=true,
      *         @OA\JsonContent(
-     *             required={"client_id", "client_secret", "seller_product_id", "name", "price", "stock"},
+     *             required={"client_id", "client_secret", "seller_product_id", "name", "price","category_id", "stock"},
      *             @OA\Property(property="client_id", type="string", example="abc123"),
      *             @OA\Property(property="client_secret", type="string", example="asdf2342432323"),
      *             @OA\Property(property="seller_product_id", type="string", example="SP001"),
@@ -31,6 +31,7 @@ class ProductSyncController extends Controller
      *             @OA\Property(property="sku", type="string", example="SKU-001"),
      *             @OA\Property(property="image_url", type="string", example="https://example.com/image.jpg"),
      *             @OA\Property(property="weight", type="number", format="float", example=0.8),
+     *             @OA\Property(property="category_id", type="number", format="float", example=1),
      *             @OA\Property(property="is_active", type="boolean", example=true)
      *         )
      *     ),
@@ -88,7 +89,8 @@ class ProductSyncController extends Controller
                 'image_url' => $request->image_url,
                 'weight' => $request->weight,
                 'is_active' => $request->is_active ?? true,
-                'last_synced_at' => \Carbon::now(),
+                'category_id' => $request->category_id,
+                'last_synced_at' => Carbon::now(),
             ]
         );
 

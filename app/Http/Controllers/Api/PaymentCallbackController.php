@@ -43,12 +43,27 @@ class PaymentCallbackController extends Controller
         // Optional logging
         Log::info('Midtrans Callback Received', $request->all());
 
-        $notif = new Notification();
+        // $notif = new Notification();
 
-        $transactionStatus = $notif->transaction_status;
-        $paymentType       = $notif->payment_type;
-        $orderId           = $notif->order_id;
-        $fraudStatus       = $notif->fraud_status;
+        // $transactionStatus = $notif->transaction_status;
+        // $paymentType       = $notif->payment_type;
+        // $orderId           = $notif->order_id;
+        // $fraudStatus       = $notif->fraud_status;
+
+        $signatureKey = $request->input('signature_key');
+        $transactionStatus = $request->input('transaction_status');
+        $paymentType       = $request->input('payment_type');
+        $orderId           = $request->input('order_id');
+        $fraudStatus       = $request->input('fraud_status');
+        $statusCode = $request->input('status_code');
+        $grossAmount = $request->input('gross_amount');
+        $serverKey = config('midtrans.server_key');
+
+        $expectedSignature = hash('sha512', $orderId.$statusCode.$grossAmount.$serverKey);
+
+        if ($signatureKey !== $expectedSignature) {
+            return response()->json(['message' => 'Invalid signature'], 403);
+        }
 
         // Find order by order_number
         $order = Order::where('order_number', $orderId)->first();

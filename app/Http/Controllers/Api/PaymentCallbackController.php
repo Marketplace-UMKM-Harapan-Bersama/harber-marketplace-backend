@@ -80,7 +80,6 @@ class PaymentCallbackController extends Controller
                         $order->payment_status = 'challenge';
                     } else {
                         $order->payment_status = 'paid';
-                        $order->order_status = 'confirmed';
                     }
                 }
 
@@ -90,7 +89,6 @@ class PaymentCallbackController extends Controller
 
             case 'settlement':
                 $order->payment_status = 'paid';
-                $order->order_status = 'confirmed';
 
                 $order->save();
 
@@ -109,7 +107,6 @@ class PaymentCallbackController extends Controller
             case 'expire':
             case 'cancel':
                 $order->payment_status = $transactionStatus;
-                $order->order_status = 'cancelled';
 
                 $order->save();
                 break;

@@ -20,6 +20,8 @@ class SellerResource extends JsonResource
             'shop_url'         => $this->shop_url,
             'shop_description' => $this->shop_description,
             'is_active'        => $this->is_active,
+            'client_id'        => $this->client_id,
+            'client_secret'    => $this->client_secret,
             'created_at'       => $this->created_at,
             'updated_at'       => $this->updated_at,
         ];

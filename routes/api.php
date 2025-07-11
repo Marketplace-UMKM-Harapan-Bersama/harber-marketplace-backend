@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ProductCategoryController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\ProductSyncController;
+use App\Http\Controllers\ProductCategorySyncController;
 
 use App\Http\Controllers\Api\PaymentCallbackController;
 
@@ -22,7 +23,7 @@ Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:api')->group(function () {
     Route::get('/users', [UserController::class, 'oauthUser']);
     Route::get('/sellers', [SellerController::class, 'oauthSeller']);
-    Route::post('/product/sync',[ProductSyncController::class,'sync']);
+    // Route::post('/product/sync',[ProductSyncController::class,'sync']);
 
     Route::get('/orders', [OrderController::class, 'index']);
     Route::get('/order/{id}', [OrderController::class, 'show']);
@@ -39,5 +40,6 @@ Route::middleware('auth:api')->group(function () {
 
 Route::post('/midtrans/callback', [PaymentCallbackController::class, 'handle']);
 Route::post('/product/sync', [ProductSyncController::class, 'syncSingleProduct']);
+Route::post('/product-category/sync',[ProductCategorySyncController::class,'sync_product_category']);
 Route::apiResource('products', ProductController::class)->only('index','show');
 Route::apiResource('product-categories', ProductCategoryController::class)->only('index','show');

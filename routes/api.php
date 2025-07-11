@@ -15,14 +15,14 @@ use App\Http\Controllers\ProductCategorySyncController;
 use App\Http\Controllers\Api\PaymentCallbackController;
 
 Route::get('/users/{id}', [UserController::class, 'show']);
-Route::get('/sellers/{id}', [SellerController::class, 'show']);
+Route::get('/seller/{id}', [SellerController::class, 'show']);
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
-    Route::get('/users', [UserController::class, 'oauthUser']);
-    Route::get('/sellers', [SellerController::class, 'oauthSeller']);
+    Route::get('/user', [UserController::class, 'oauthUser']);
+    Route::get('/seller', [SellerController::class, 'oauthSeller']);
     // Route::post('/product/sync',[ProductSyncController::class,'sync']);
 
     Route::get('/orders', [OrderController::class, 'index']);

@@ -20,6 +20,8 @@ class ProductCategoryResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'parent_id' => $this->parent_id,
+            'seller_product_category_id' => $this->seller_product_category_id,
+            'is_active' => $this->is_active,
             'product_count' => $this->products_count ?? $this->products()->count(),
             'products' => ProductResource::collection($this->whenLoaded('products')),
             'created_at' => $this->created_at,

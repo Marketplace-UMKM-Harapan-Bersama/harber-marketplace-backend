@@ -17,6 +17,8 @@ class ProductCategory extends Model
         'slug',
         'seller_id',
         'parent_id',
+        'seller_product_category_id',
+        'is_active'
     ];
 
     public function getSlugOptions() : SlugOptions

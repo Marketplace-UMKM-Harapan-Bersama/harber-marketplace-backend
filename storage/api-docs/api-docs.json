@@ -862,6 +862,220 @@
                 }
             }
         },
+        "/api/sellers/{id}": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get seller detail by ID",
+                "description": "Retrieve seller information including related user",
+                "operationId": "73ed158762d1f16ba917f182b3a41b32",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the seller",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Seller retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seller retrieved successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "shop_name": {
+                                                    "type": "string",
+                                                    "example": "Toko Jaya Abadi"
+                                                },
+                                                "shop_url": {
+                                                    "type": "string",
+                                                    "example": "tokojayaabadi"
+                                                },
+                                                "shop_description": {
+                                                    "type": "string",
+                                                    "example": "Menjual berbagai produk rumah tangga"
+                                                },
+                                                "is_active": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 9
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Jamal Apriadi"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "jamal@example.com"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Invalid seller ID",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid seller ID"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string",
+                                                        "example": "The selected id is invalid."
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            }
+        },
+        "/api/seller": {
+            "get": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Get the seller data for the authenticated user",
+                "operationId": "826a3fdb626b98777a178328e8c1a5a3",
+                "responses": {
+                    "200": {
+                        "description": "Seller retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seller retrieved successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "shop_name": {
+                                                    "type": "string",
+                                                    "example": "Toko Jaya Abadi"
+                                                },
+                                                "shop_url": {
+                                                    "type": "string",
+                                                    "example": "tokojayaabadi"
+                                                },
+                                                "shop_description": {
+                                                    "type": "string",
+                                                    "example": "Menjual berbagai produk rumah tangga"
+                                                },
+                                                "client_id": {
+                                                    "type": "string",
+                                                    "example": "abc123clientid"
+                                                },
+                                                "client_secret": {
+                                                    "type": "string",
+                                                    "example": "secret123"
+                                                },
+                                                "is_active": {
+                                                    "type": "boolean",
+                                                    "example": true
+                                                },
+                                                "user": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 9
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Jamal Apriadi"
+                                                        },
+                                                        "email": {
+                                                            "type": "string",
+                                                            "example": "jamal@example.com"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Seller not found for the current user",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Seller not found for the current user."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
         "/api/user": {
             "get": {
                 "tags": [

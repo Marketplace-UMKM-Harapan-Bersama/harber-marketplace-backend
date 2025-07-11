@@ -26,7 +26,7 @@ class ProductCategoryController extends Controller
      */
     public function index()
     {
-        return ProductCategoryResource::collection(ProductCategory::paginate(15));
+        return ProductCategoryResource::collection(ProductCategory::where('is_active', true)->paginate(15));
     }
 
     /**

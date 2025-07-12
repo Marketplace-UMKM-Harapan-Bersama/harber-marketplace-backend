@@ -112,7 +112,7 @@ class AuthController extends Controller
                     'shop_name' => $request->shop_name,
                     'shop_url' => $request->shop_url ?? null,
                     'shop_description' => $request->shop_description ?? null,
-                    'client_id' => $user->id,
+                    'client_id' => 'client_'.$user->id.Str::random(10),
                     'client_secret' => Str::random(40),
                 ]);
             }

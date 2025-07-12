@@ -22,6 +22,7 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:api')->group(function () {
     Route::get('/user', [UserController::class, 'oauthUser']);
+    Route::post('logout', [UserController::class, 'logout']);
     Route::get('/seller', [SellerController::class, 'oauthSeller']);
     // Route::post('/product/sync',[ProductSyncController::class,'sync']);
 

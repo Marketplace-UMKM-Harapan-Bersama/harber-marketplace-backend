@@ -24,6 +24,7 @@ class MarketplaceUserResource extends JsonResource
             'province'        => $this->province,
             'postal_code'     => $this->postal_code,
             'role'            => $this->role,
+            'seller'          => new SellerResource($this->whenLoaded('seller')),
             'email_verified_at' => $this->email_verified_at,
             'created_at'      => $this->created_at,
             'updated_at'      => $this->updated_at,

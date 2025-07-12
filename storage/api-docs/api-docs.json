@@ -862,14 +862,14 @@
                 }
             }
         },
-        "/api/sellers/{id}": {
+        "/api/seller/{id}": {
             "get": {
                 "tags": [
                     "Auth"
                 ],
                 "summary": "Get seller detail by ID",
                 "description": "Retrieve seller information including related user",
-                "operationId": "73ed158762d1f16ba917f182b3a41b32",
+                "operationId": "6fcbe624f2ea5797049bbfc59b11e3bc",
                 "parameters": [
                     {
                         "name": "id",
@@ -1149,6 +1149,42 @@
                     },
                     "401": {
                         "description": "Unauthorized (unauthenticated)"
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout authenticated user (revoke access token)",
+                "description": "Logout the authenticated user by revoking the access token.",
+                "operationId": "9872a1ded930c0faa99c7f184b4cd654",
+                "responses": {
+                    "200": {
+                        "description": "User logged out successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Logged out successfully."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated"
                     }
                 },
                 "security": [

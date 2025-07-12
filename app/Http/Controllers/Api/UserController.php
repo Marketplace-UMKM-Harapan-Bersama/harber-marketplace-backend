@@ -32,9 +32,46 @@ class UserController extends Controller
     }
 
     public function oauthUser(Request $request) {
+        $user = MarketplaceUser::find($request->user()->id);
+
+        // Jika role seller, load seller relation
+        if ($user && $user->role === 'seller') {
+            $user->load('seller');
+        }
+
         return response()->json([
             'message' => 'User retrieved successfully',
-            'data' => $request->user(),
+            'data' => new MarketplaceUserResource($user),
+        ]);
+    }
+
+    /**
+     * Logout the authenticated user by revoking the access token.
+     *
+     * @OA\Post(
+     *     path="/api/logout",
+     *     tags={"Auth"},
+     *     summary="Logout authenticated user (revoke access token)",
+     *     security={{"passport":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="User logged out successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Logged out successfully.")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated"
+     *     )
+     * )
+     */
+    public function logout(Request $request)
+    {
+        $request->user()->token()->revoke();
+
+        return response()->json([
+            'message' => 'Logged out successfully.'
         ]);
     }
 }

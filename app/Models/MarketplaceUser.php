@@ -51,7 +51,7 @@ class MarketplaceUser extends Authenticatable
 
     public function seller()
     {
-        return $this->hasOne(Seller::class);
+        return $this->hasOne(Seller::class,'user_id');
     }
 }
 
